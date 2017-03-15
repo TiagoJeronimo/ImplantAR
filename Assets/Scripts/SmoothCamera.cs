@@ -6,7 +6,6 @@ using Vuforia;
 public class SmoothCamera : MonoBehaviour {
 
 	public int smoothingFrames = 10;
-	private VuforiaBehaviour qcarBehavior;
 
 	private Quaternion smoothedRotation;
 	private Vector3 smoothedPosition;
@@ -47,7 +46,6 @@ public class SmoothCamera : MonoBehaviour {
 
 		rotations = new Queue<Quaternion>(smoothingFrames);
 		positions = new Queue<Vector3>(smoothingFrames);
-		qcarBehavior = GetComponent<VuforiaBehaviour>();
 
 		VuforiaARController vuforia = VuforiaARController.Instance;
 //		qcarBehavior.RegisterVuforiaStartedCallback(OnInitialized);
