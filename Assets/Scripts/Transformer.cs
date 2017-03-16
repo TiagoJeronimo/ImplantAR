@@ -45,7 +45,7 @@ public class Transformer : MonoBehaviour {
 
         if (!ScrewFixed) {
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
-                this.transform.SetParent(NewParent.parent);
+                this.transform.SetParent(NewParent);
                 ScrewFixed = true;
                 Debug.Log("Screw fixed");
             }

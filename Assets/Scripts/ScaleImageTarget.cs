@@ -11,6 +11,7 @@ public class ScaleImageTarget : MonoBehaviour {
 
     Vector3 InitialScale;
     bool Scale = true;
+    float CurrentDistance;
 
 
     // Use this for initialization
@@ -22,17 +23,25 @@ public class ScaleImageTarget : MonoBehaviour {
 	void Update () {
         if (Scale) {
             Vector3 delta = Camera.main.transform.position - this.transform.position;
-            float currentDistance = delta.magnitude;
+            CurrentDistance = delta.magnitude;
             //Debug.Log("Distance: " + currentDistance);
 
-            if (currentDistance <= MinDistance) {
+            if (CurrentDistance <= MinDistance) {
                 transform.localScale = InitialScale;
-            } else if (currentDistance >= MaxDistance) {
+            } else if (CurrentDistance >= MaxDistance) {
                 Scale = false;
-            } else if (currentDistance > MinDistance && currentDistance < MaxDistance) {
-                transform.localScale = InitialScale * currentDistance * ScaleFactor;
+            } else if (CurrentDistance > MinDistance && CurrentDistance < MaxDistance) {
+                transform.localScale = InitialScale * CurrentDistance * ScaleFactor;
             }
            
         }
+    }
+
+    public void EnableScale() {
+        Scale = !Scale;
+    }
+
+    void OnGUI() {
+        GUI.Label(new Rect(10, 10, Screen.width, Screen.height), "Distance from target: " + CurrentDistance);
     }
 }
