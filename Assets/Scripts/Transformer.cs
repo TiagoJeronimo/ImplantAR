@@ -20,10 +20,7 @@ public class Transformer : MonoBehaviour {
 	GameObject rotationCentre;
 
 	// translate
-	public float panSpeed = 2.0f;
-	bool isMovingLeft, isMovingRight;
-	bool isMovingUp, isMovingDown;
-	bool isMovingForward, isMovingBackward;
+	public float panSpeed = 4.0f;
 	Vector3 translationAxis;
 
 	// scale
@@ -46,12 +43,33 @@ public class Transformer : MonoBehaviour {
 
     void Update() {
 
-        if (ScrewFixed) {
-            // rotate 
+        if (!ScrewFixed) {
+            if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
+                this.transform.SetParent(NewParent.parent);
+                ScrewFixed = true;
+                Debug.Log("Screw fixed");
+            }
+        } else if (ScrewFixed) {
 
+            // translate
+            if (Input.GetMouseButton(0)) {
+                float distance;
+                float rotX = Input.GetAxis("Mouse X");
+                float rotY = Input.GetAxis("Mouse Y");
+
+                translationAxis = Camera.main.transform.right;
+                distance = panSpeed * rotX * Time.deltaTime;
+                this.transform.position += translationAxis * distance;
+
+                translationAxis = Camera.main.transform.up;
+                distance = panSpeed * rotY * Time.deltaTime;
+                this.transform.position += translationAxis * distance;
+            }
+
+            // rotate 
             if (Input.GetMouseButtonDown(1)) {
                 isRotating = true;
-                if (Input.GetMouseButtonDown(1)) rotationCentre = this.gameObject;
+                rotationCentre = this.gameObject;
                 mouseOrigin = Input.mousePosition;
             }
 
@@ -66,12 +84,8 @@ public class Transformer : MonoBehaviour {
                 if (!Input.GetMouseButton(1)) isRotating = false;
             }
 
-            // translate
-
-
             // scale
-
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            /*float scroll = Input.GetAxis("Mouse ScrollWheel");
             isScaling = scroll != 0;
 
             if (isScaling) {
@@ -79,31 +93,7 @@ public class Transformer : MonoBehaviour {
                 scale = Mathf.Clamp(scale, scaleMin, scaleMax);
                 this.transform.localScale = new Vector3(scale, scale, scale);
                 if (scroll == 0) isScaling = false;
-            }
-
+            }*/
         }
-    }
-
-    void OnMouseDrag() {
-        float distance;
-        float rotX = Input.GetAxis("Mouse X");
-        float rotY = Input.GetAxis("Mouse Y");
-
-        translationAxis = Camera.main.transform.right;
-        distance = panSpeed * rotX * Time.deltaTime;
-        this.transform.position += translationAxis * distance;
-    
-        translationAxis = Camera.main.transform.up;
-        distance = panSpeed * rotY * Time.deltaTime;
-        this.transform.position += translationAxis * distance;
-}
-
-    void OnMouseDown() {
-        if (!ScrewFixed) {
-            this.transform.SetParent(NewParent.parent);
-            ScrewFixed = true;
-            Debug.Log("Screw fixed");
-        }
-    }
-	
+    }	
 }
