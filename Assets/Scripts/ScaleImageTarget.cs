@@ -5,8 +5,6 @@ using Vuforia;
 
 public class ScaleImageTarget : MonoBehaviour {
 
-    TrackableBehaviour mTrackableBehaviour;
-
     public float MinDistance;
     public float MaxDistance;
     public float ScaleFactor;
@@ -27,19 +25,14 @@ public class ScaleImageTarget : MonoBehaviour {
             float currentDistance = delta.magnitude;
             //Debug.Log("Distance: " + currentDistance);
 
-            if (currentDistance < MinDistance) {
+            if (currentDistance <= MinDistance) {
                 transform.localScale = InitialScale;
-            } else if (currentDistance >= MinDistance && currentDistance <= MaxDistance) {
+            } else if (currentDistance >= MaxDistance) {
+                Scale = false;
+            } else if (currentDistance > MinDistance && currentDistance < MaxDistance) {
                 transform.localScale = InitialScale * currentDistance * ScaleFactor;
             }
-            if (currentDistance > MaxDistance) {
-                Scale = false;
-            }
+           
         }
-    }
-
-    void OnMouseDown() {
-        Debug.Log("Box Clicked!");
-        Scale = !Scale;
     }
 }
