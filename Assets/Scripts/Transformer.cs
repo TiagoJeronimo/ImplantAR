@@ -57,13 +57,34 @@ public class Transformer : MonoBehaviour {
                 float rotX = Input.GetAxis("Mouse X");
                 float rotY = Input.GetAxis("Mouse Y");
 
-                translationAxis = Camera.main.transform.right;
-                distance = panSpeed * rotX * Time.deltaTime;
-                this.transform.position += translationAxis * distance;
 
-                translationAxis = Camera.main.transform.up;
-                distance = panSpeed * rotY * Time.deltaTime;
-                this.transform.position += translationAxis * distance;
+                #if UNITY_EDITOR || UNITY_STANDALONE
+
+                    translationAxis = Camera.main.transform.right;
+                    distance = panSpeed * rotX * Time.deltaTime;
+                    this.transform.position += translationAxis * distance;
+
+                    translationAxis = Camera.main.transform.up;
+                    distance = panSpeed * rotY * Time.deltaTime;
+                    this.transform.position += translationAxis * distance;
+
+                #else
+
+                    if (Input.touchCount > 0) {
+
+                        rotX = Input.touches[0].deltaPosition.x;
+                        rotY = Input.touches[0].deltaPosition.y;
+
+                        translationAxis = Camera.main.transform.right;
+                        distance = panSpeed * rotX * Time.deltaTime;
+                        this.transform.position += translationAxis * distance;
+
+                        translationAxis = Camera.main.transform.up;
+                        distance = panSpeed * rotY * Time.deltaTime;
+                        this.transform.position += translationAxis * distance;
+                    }
+
+                #endif
             }
 
             // rotate 
@@ -95,5 +116,10 @@ public class Transformer : MonoBehaviour {
                 if (scroll == 0) isScaling = false;
             }*/
         }
-    }	
+    }
+
+    void OnMouseDrag() {
+        Debug.Log("draging");
+    }
+
 }
