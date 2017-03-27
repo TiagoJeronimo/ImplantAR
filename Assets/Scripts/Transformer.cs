@@ -30,10 +30,12 @@ public class Transformer : MonoBehaviour {
     void Update() {
 
         if (!ScrewFixed) {
+            this.transform.LookAt(new Vector3(NewParent.position.x, this.transform.position.y, NewParent.position.z));
 
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 this.transform.SetParent(NewParent);
                 ScrewFixed = true;
+                Handheld.Vibrate();
                 Debug.Log("Screw fixed");
             }
         } else if (ScrewFixed) {
