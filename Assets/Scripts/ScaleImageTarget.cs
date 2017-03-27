@@ -7,38 +7,40 @@ public class ScaleImageTarget : MonoBehaviour {
 
     public float MinDistance;
     public float MaxDistance;
-    public float ScaleFactor;
+    public float Scale;
+    public float ScaleFactor = 0.01F;
 
-    Vector3 InitialScale;
-    bool Scale = true;
-    float CurrentDistance;
+    private Vector3 InitialScale;
+    private bool ScaleOn = true;
+    private float CurrentDistance;
 
 
     // Use this for initialization
     void Start () {
         InitialScale = transform.localScale;
-            }
-	
-	// Update is called once per frame
-	void Update () {
-        if (Scale) {
-            Vector3 delta = Camera.main.transform.position - this.transform.position;
-            CurrentDistance = delta.magnitude;
-            //Debug.Log("Distance: " + currentDistance);
+    }
 
-            if (CurrentDistance <= MinDistance) {
-                transform.localScale = InitialScale;
-            } else if (CurrentDistance >= MaxDistance) {
-                Scale = false;
-            } else if (CurrentDistance > MinDistance && CurrentDistance < MaxDistance) {
-                transform.localScale = InitialScale * CurrentDistance * ScaleFactor;
+    // Update is called once per frame
+    void Update() {
+        if (ScaleOn) {
+
+            CurrentDistance = (transform.position - Camera.main.transform.position).magnitude;
+            float norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);
+            norm = Mathf.Clamp01(norm);
+
+            Vector3 minScale = InitialScale;
+            Vector3 maxScale = Vector3.one * ScaleFactor * Scale;
+
+            transform.localScale = Vector3.Lerp(minScale, maxScale, norm);
+
+            if (CurrentDistance >= MaxDistance) {
+                ScaleOn = false;
             }
-           
         }
     }
 
     public void EnableScale() {
-        Scale = !Scale;
+        ScaleOn = !ScaleOn;
     }
 
     void OnGUI() {
