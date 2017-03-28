@@ -10,8 +10,8 @@ public class ScaleImageTarget : MonoBehaviour {
     public float Scale;
     public float ScaleFactor = 0.01F;
 
+    private bool ScaleOn = false;
     private Vector3 InitialScale;
-    private bool ScaleOn = true;
     private float CurrentDistance;
 
 
@@ -39,8 +39,12 @@ public class ScaleImageTarget : MonoBehaviour {
         }
     }
 
-    public void EnableScale() {
+    public void ChangeScale() {
         ScaleOn = !ScaleOn;
+    }
+
+    public void EnableScale() {
+        ScaleOn = true;
     }
 
     void OnGUI() {

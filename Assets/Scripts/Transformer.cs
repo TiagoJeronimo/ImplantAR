@@ -27,6 +27,10 @@ public class Transformer : MonoBehaviour {
     public Transform NewParent;
     bool ScrewFixed = false;
 
+    void Start() {
+        NewParent.GetComponent<ScaleImageTarget>().EnableScale();
+    }
+
     void Update() {
 
         if (!ScrewFixed) {
@@ -66,6 +70,21 @@ public class Transformer : MonoBehaviour {
 
                 #if UNITY_EDITOR || UNITY_STANDALONE
 
+                translationAxis = Camera.main.transform.right;
+                distance = panSpeed * rotX * Time.deltaTime;
+                this.transform.position += translationAxis * distance;
+
+                translationAxis = Camera.main.transform.up;
+                distance = panSpeed * rotY * Time.deltaTime;
+                this.transform.position += translationAxis * distance;
+
+                #else
+
+                if (Input.touchCount > 0) {
+
+                    rotX = Input.touches[0].deltaPosition.x;
+                    rotY = Input.touches[0].deltaPosition.y;
+
                     translationAxis = Camera.main.transform.right;
                     distance = panSpeed * rotX * Time.deltaTime;
                     this.transform.position += translationAxis * distance;
@@ -73,22 +92,7 @@ public class Transformer : MonoBehaviour {
                     translationAxis = Camera.main.transform.up;
                     distance = panSpeed * rotY * Time.deltaTime;
                     this.transform.position += translationAxis * distance;
-
-                #else
-
-                    if (Input.touchCount > 0) {
-
-                        rotX = Input.touches[0].deltaPosition.x;
-                        rotY = Input.touches[0].deltaPosition.y;
-
-                        translationAxis = Camera.main.transform.right;
-                        distance = panSpeed * rotX * Time.deltaTime;
-                        this.transform.position += translationAxis * distance;
-
-                        translationAxis = Camera.main.transform.up;
-                        distance = panSpeed * rotY * Time.deltaTime;
-                        this.transform.position += translationAxis * distance;
-                    }
+                }
                 #endif
             }
         }
