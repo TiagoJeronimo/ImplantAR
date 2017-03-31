@@ -65,6 +65,7 @@ namespace Vuforia
 
         #region PRIVATE_METHODS
 
+        public GameObject bgPlane;
 
         private void OnTrackingFound()
         {
@@ -84,6 +85,9 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+            bgPlane.SetActive(false);
+
+
         }
 
 
@@ -105,6 +109,7 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+            bgPlane.SetActive(true);
         }
 
         #endregion // PRIVATE_METHODS
