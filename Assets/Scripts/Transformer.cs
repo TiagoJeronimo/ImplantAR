@@ -19,22 +19,32 @@ public class Transformer : MonoBehaviour {
 	Vector3 angleDelta;
 	GameObject rotationCentre;
 
-	// translate
+	// Translate
 	public float panSpeed = 4.0f;
 	Vector3 translationAxis;
 
-    // screw
+    //Scale
+    private Vector3 InitialScale;
+
+    // Screw
     public Transform NewParent;
+    ScaleImageTarget ScaleImageTargetScript;
     bool ScrewFixed = false;
 
     void Start() {
-        NewParent.GetComponent<ScaleImageTarget>().EnableScale();
+        InitialScale = transform.localScale;
+        ScaleImageTargetScript = NewParent.GetComponent<ScaleImageTarget>();
+        ScaleImageTargetScript.EnableScale();
+        GetComponent<ScaleImageTarget>().EnableScale();
     }
 
     void Update() {
 
         if (!ScrewFixed) {
             this.transform.LookAt(new Vector3(NewParent.position.x, this.transform.position.y, NewParent.position.z));
+
+            Vector3 maxScale = InitialScale * ScaleImageTargetScript.Scale;
+            transform.localScale = Vector3.Lerp(InitialScale, new Vector3 (75,75,75), ScaleImageTargetScript.Norm);
 
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 this.transform.SetParent(NewParent);

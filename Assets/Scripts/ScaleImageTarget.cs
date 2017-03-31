@@ -8,7 +8,9 @@ public class ScaleImageTarget : MonoBehaviour {
     public float MinDistance;
     public float MaxDistance;
     public float Scale;
-    public float ScaleFactor = 0.01F;
+
+    [HideInInspector]
+    public float Norm;
 
     private bool ScaleOn = false;
     private Vector3 InitialScale;
@@ -23,15 +25,15 @@ public class ScaleImageTarget : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (ScaleOn) {
+            Debug.Log("yaa");
 
             CurrentDistance = (transform.position - Camera.main.transform.position).magnitude;
-            float norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);
-            norm = Mathf.Clamp01(norm);
+            Norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);
+            Norm = Mathf.Clamp01(Norm);
 
-            Vector3 minScale = InitialScale;
-            Vector3 maxScale = Vector3.one * ScaleFactor * Scale;
+            Vector3 maxScale = InitialScale * Scale;
 
-            transform.localScale = Vector3.Lerp(minScale, maxScale, norm);
+            transform.localScale = Vector3.Lerp(InitialScale, maxScale, Norm);
 
             if (CurrentDistance >= MaxDistance) {
                 ScaleOn = false;
