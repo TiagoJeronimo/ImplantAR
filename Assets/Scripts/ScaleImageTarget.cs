@@ -25,7 +25,6 @@ public class ScaleImageTarget : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (ScaleOn) {
-            Debug.Log("yaa");
 
             CurrentDistance = (transform.position - Camera.main.transform.position).magnitude;
             Norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);

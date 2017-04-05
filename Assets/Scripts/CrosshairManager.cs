@@ -5,6 +5,8 @@ using UnityEngine;
 public class CrosshairManager : MonoBehaviour {
 
     public GameObject Catalog;
+    public Texture OpenHand;
+    public Texture CloseHand;
 
     private RaycastHit Hit;
     private Transform Implant;
@@ -21,14 +23,16 @@ public class CrosshairManager : MonoBehaviour {
         if (Physics.Raycast(cam.position, cam.forward, out Hit, 1000)) {
             if (Hit.transform.CompareTag("Implant")) {
                 GetComponent<Renderer>().material.color = Color.green;
+                GetComponent<Renderer>().material.mainTexture = CloseHand;
                 if (Input.GetMouseButton(0)) {
                     Implant = Hit.transform;
                     Implant.SetParent(this.transform.parent);
-                    Implant.localPosition = new Vector3(0, 10, 60);
+                    Implant.localPosition = new Vector3(0, 10, 120);
                     Invoke("EnableTransform", 1);
                 }
             } else {
                 GetComponent<Renderer>().material.color = Color.white;
+                GetComponent<Renderer>().material.mainTexture = OpenHand;
             }
         }
     }
