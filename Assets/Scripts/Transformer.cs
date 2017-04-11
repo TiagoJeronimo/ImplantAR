@@ -46,7 +46,7 @@ public class Transformer : MonoBehaviour {
             SpotLight.SetActive(true);
 
             Vector3 maxScale = InitialScale * ScaleImageTargetScript.Scale;
-            transform.localScale = Vector3.Lerp(InitialScale, new Vector3 (75,75,75), ScaleImageTargetScript.Norm);
+            transform.localScale = Vector3.Lerp(InitialScale, maxScale, ScaleImageTargetScript.Norm);
 
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 this.transform.SetParent(NewParent);

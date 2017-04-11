@@ -10,11 +10,13 @@ public class CrosshairManager : MonoBehaviour {
 
     private RaycastHit Hit;
     private Transform Implant;
+    private Renderer Renderer;
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        Renderer = GetComponent<Renderer>();
+
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -22,18 +24,19 @@ public class CrosshairManager : MonoBehaviour {
         //Debug.DrawRay(cam.position, cam.forward * 1000, Color.yellow);
         if (Physics.Raycast(cam.position, cam.forward, out Hit, 1000)) {
             if (Hit.transform.CompareTag("Implant")) {
-                GetComponent<Renderer>().material.color = Color.green;
-                GetComponent<Renderer>().material.mainTexture = CloseHand;
+                Renderer.material.color = Color.green;
+                Renderer.material.mainTexture = CloseHand;
                 if (Input.GetMouseButton(0)) {
+                    Renderer.enabled = false; 
                     Implant = Hit.transform;
                     Implant.SetParent(this.transform.parent);
                     Implant.localPosition = new Vector3(0, 10, 120);
                     Invoke("EnableTransform", 1);
                 }
-            } else {
-                GetComponent<Renderer>().material.color = Color.white;
-                GetComponent<Renderer>().material.mainTexture = OpenHand;
-            }
+            } 
+        } else {
+            Renderer.material.color = Color.white;
+            Renderer.material.mainTexture = OpenHand;
         }
     }
 
