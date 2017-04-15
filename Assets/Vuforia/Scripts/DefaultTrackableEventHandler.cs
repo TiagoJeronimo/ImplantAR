@@ -109,7 +109,7 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
-            bgPlane.SetActive(true);
+            if(bgPlane) bgPlane.SetActive(true);
         }
 
         #endregion // PRIVATE_METHODS

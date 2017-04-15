@@ -49,6 +49,9 @@ public class ScaleImageTarget : MonoBehaviour {
     }
 
     void OnGUI() {
-        GUI.Label(new Rect(10, 10, Screen.width, Screen.height), "Distance from target: " + CurrentDistance);
+        GUIStyle style = new GUIStyle();
+        style.fontSize = Screen.height * 2 / 30;
+        style.normal.textColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        GUI.Label(new Rect(0, 100, Screen.width, Screen.height), "Distance from target: " + CurrentDistance, style);
     }
 }
