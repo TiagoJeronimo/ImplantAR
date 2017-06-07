@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ImplantAR.unity
+- path: C:/Users/Tiago/Documents/GitHub/ImplantARVolume/Assets/ImplantAR.unity
   isLoaded: 1
   isActive: 1

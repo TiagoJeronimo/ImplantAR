@@ -16,8 +16,8 @@ public class Transformer : MonoBehaviour {
 	GameObject rotationCentre;
 
 	// Translate
-	//public float panSpeed = 4.0f;
-	//Vector3 translationAxis;
+	public float panSpeed = 4.0f;
+	Vector3 translationAxis;
 
     //Scale
     private Vector3 InitialScale;
@@ -29,6 +29,13 @@ public class Transformer : MonoBehaviour {
 
     public GameObject Joystick;
     public GameObject SpotLight;
+
+    //Text
+    public GameObject Angulation;
+
+
+    private float rotX = 0.0f;
+    private float rotZ = 0.0f;
 
     void Start() {
         InitialScale = transform.localScale;
@@ -80,12 +87,11 @@ public class Transformer : MonoBehaviour {
                 if (!Input.GetMouseButton(0)) isRotating = false;
             }
 
-            // translate (not in use)
-            /*if (Input.GetMouseButton(1)) {
-                float distance;
-                float rotX = Input.GetAxis("Mouse X");
-                float rotY = Input.GetAxis("Mouse Y");
+            float distance;
+            float rotX = Input.GetAxis("Mouse X");
+            float rotY = Input.GetAxis("Mouse Y");
 
+            if (Input.GetMouseButton(1)) {
                 #if UNITY_EDITOR || UNITY_STANDALONE
 
                 translationAxis = Camera.main.transform.right;
@@ -112,7 +118,25 @@ public class Transformer : MonoBehaviour {
                     this.transform.position += translationAxis * distance;
                 }
                 #endif
-            }*/
+            }
+
+            if (Input.GetMouseButton(2)) {
+                translationAxis = Camera.main.transform.forward;
+                distance = panSpeed * rotY * Time.deltaTime;
+                this.transform.position += translationAxis * distance;
+            }
+
+
         }
+        Angulation.transform.position = this.transform.position;
+
+        float angleX = transform.localEulerAngles.x;
+        angleX = (angleX > 180) ? angleX - 360 : angleX;
+
+        float angleZ = transform.localEulerAngles.z;
+        angleZ = (angleZ > 180) ? angleZ - 360 : angleZ;
+
+        Angulation.GetComponent<TextMesh>().text = "    X: " + angleX.ToString("F1") + " Z: " + angleZ.ToString("F1");
     }
+
 }
