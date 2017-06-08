@@ -5,19 +5,6 @@ using UnityEngine;
 using CnControls;
 
 public class Transformer : MonoBehaviour {
-	
-	// rotate
-	public float  rotSpeed = 4.0f;
-	bool isRotating;
-	Vector3 rotationAxisX;
-	Vector3 rotationAxisY;
-	Vector3 mouseOrigin;
-	Vector3 angleDelta;
-	GameObject rotationCentre;
-
-	// Translate
-	public float panSpeed = 4.0f;
-	Vector3 translationAxis;
 
     //Scale
     private Vector3 InitialScale;
@@ -29,24 +16,33 @@ public class Transformer : MonoBehaviour {
 
     public GameObject Joystick;
     public GameObject SpotLight;
+    public GameObject Line;
 
     //Text
     public GameObject Angulation;
 
-
-    private float rotX = 0.0f;
-    private float rotZ = 0.0f;
+    private float RotX = 0.0f;
+    private float RotY = 0.0f;
+    private float MovX = 0.0f;
+    private float MovY = 0.0f;
+    private float MovZ = 0.0f;
 
     void Start() {
         InitialScale = transform.localScale;
         ScaleImageTargetScript = NewParent.GetComponent<ScaleImageTarget>();
         ScaleImageTargetScript.EnableScale();
+
+        Line.transform.SetParent(this.transform);
+        Line.transform.localPosition = Vector3.zero;
+        Line.transform.localEulerAngles = new Vector3(0.0f,0.0f,90.0f);
+        Line.SetActive(true);
     }
 
     void Update() {
 
         if (!ScrewFixed) {
             this.transform.LookAt(new Vector3(NewParent.position.x, this.transform.position.y, NewParent.position.z));
+            //transform.rotation = Quaternion.LookRotation(NewParent.position);
 
             SpotLight.transform.SetParent(this.transform);
             SpotLight.transform.localPosition =  Vector3.zero;
@@ -63,80 +59,48 @@ public class Transformer : MonoBehaviour {
             }
         } else if (ScrewFixed) {
 
+            MovX = transform.localPosition.x;
+            MovY = transform.localPosition.y;
+            MovZ = transform.localPosition.z;
+
             Joystick.SetActive(true);
 
             // rotate 
-            if (Input.GetMouseButtonDown(0)) {
-                isRotating = true;
-                rotationCentre = this.gameObject;
-                //mouseOrigin = Input.mousePosition;
+            if (Input.GetMouseButton(0)) {
+                
+                // Angulation text
+                Angulation.transform.position = this.transform.position;
+                float angleX = transform.eulerAngles.x;
+                angleX = (angleX > 180) ? angleX - 360 : angleX;
+                float angleZ = transform.eulerAngles.z;
+                angleZ = (angleZ > 180) ? angleZ - 360 : angleZ;
+                Angulation.GetComponent<TextMesh>().text = "    X: " + angleX.ToString("F1") + " Z: " + angleZ.ToString("F1");
+
+                //rotationAxisX = Camera.main.transform.up;
+                //rotationAxisY = Camera.main.transform.right;
+
+                /*this.transform.RotateAround(rotationCentre.transform.position, -rotationAxisX, CnInputManager.GetAxis("Horizontal"));
+                this.transform.RotateAround(rotationCentre.transform.position, rotationAxisY, CnInputManager.GetAxis("Vertical"));*/
+
+                RotX -= CnInputManager.GetAxis("Horizontal");
+                RotY += CnInputManager.GetAxis("Vertical");
+                transform.eulerAngles = new Vector3(RotY, 0, RotX);
             }
-
-            if (isRotating) {
-                rotationAxisX = Camera.main.transform.up;
-                rotationAxisY = Camera.main.transform.right;
-                /*angleDelta = (Input.mousePosition - mouseOrigin) / Screen.width;
-                angleDelta *= rotSpeed;
-                angleDelta.x *= -1;*/
-                //this.transform.RotateAround(rotationCentre.transform.position, rotationAxisX, angleDelta.x);
-                //this.transform.RotateAround(rotationCentre.transform.position, rotationAxisY, angleDelta.y);
-
-                this.transform.RotateAround(rotationCentre.transform.position, -rotationAxisX, CnInputManager.GetAxis("Horizontal"));
-                this.transform.RotateAround(rotationCentre.transform.position, rotationAxisY, CnInputManager.GetAxis("Vertical"));
-
-                if (!Input.GetMouseButton(0)) isRotating = false;
-            }
-
-            float distance;
-            float rotX = Input.GetAxis("Mouse X");
-            float rotY = Input.GetAxis("Mouse Y");
 
             if (Input.GetMouseButton(1)) {
-                #if UNITY_EDITOR || UNITY_STANDALONE
-
-                translationAxis = Camera.main.transform.right;
-                distance = panSpeed * rotX * Time.deltaTime;
-                this.transform.position += translationAxis * distance;
-
-                translationAxis = Camera.main.transform.up;
-                distance = panSpeed * rotY * Time.deltaTime;
-                this.transform.position += translationAxis * distance;
-
-                #else
-
-                if (Input.touchCount > 0) {
-
-                    rotX = Input.touches[0].deltaPosition.x;
-                    rotY = Input.touches[0].deltaPosition.y;
-
-                    translationAxis = Camera.main.transform.right;
-                    distance = panSpeed * rotX * Time.deltaTime;
-                    this.transform.position += translationAxis * distance;
-
-                    translationAxis = Camera.main.transform.up;
-                    distance = panSpeed * rotY * Time.deltaTime;
-                    this.transform.position += translationAxis * distance;
-                }
-                #endif
+                MovX -= CnInputManager.GetAxis("Horizontal");
+                MovY -= CnInputManager.GetAxis("Vertical");
+                transform.localPosition = new Vector3(MovX, MovY, transform.localPosition.z);
             }
 
             if (Input.GetMouseButton(2)) {
-                translationAxis = Camera.main.transform.forward;
-                distance = panSpeed * rotY * Time.deltaTime;
-                this.transform.position += translationAxis * distance;
+                MovZ -= CnInputManager.GetAxis("Vertical");
+                transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, MovZ);
             }
 
 
         }
-        Angulation.transform.position = this.transform.position;
-
-        float angleX = transform.localEulerAngles.x;
-        angleX = (angleX > 180) ? angleX - 360 : angleX;
-
-        float angleZ = transform.localEulerAngles.z;
-        angleZ = (angleZ > 180) ? angleZ - 360 : angleZ;
-
-        Angulation.GetComponent<TextMesh>().text = "    X: " + angleX.ToString("F1") + " Z: " + angleZ.ToString("F1");
+        
     }
 
 }
