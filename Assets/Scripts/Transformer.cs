@@ -87,13 +87,13 @@ public class Transformer : MonoBehaviour {
                 transform.eulerAngles = new Vector3(RotY, 0, RotX);
             }
 
-            if (Input.GetMouseButton(1)) {
+            else if (Input.GetMouseButton(1)) {
                 MovX -= CnInputManager.GetAxis("Horizontal");
                 MovY -= CnInputManager.GetAxis("Vertical");
                 transform.localPosition = new Vector3(MovX, MovY, transform.localPosition.z);
             }
 
-            if (Input.GetMouseButton(2)) {
+            else if (Input.GetMouseButton(2)) {
                 MovZ -= CnInputManager.GetAxis("Vertical");
                 transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, MovZ);
             }
