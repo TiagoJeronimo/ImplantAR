@@ -29,6 +29,7 @@ public class CrosshairManager : MonoBehaviour {
                 if (Input.GetMouseButton(0)) {
                     Renderer.enabled = false; 
                     Implant = Hit.transform;
+                    Implant.transform.tag = "CImp";
                     Implant.SetParent(this.transform.parent);
                     Implant.localPosition = new Vector3(0, 10, 120);
                     Invoke("EnableTransform", 1);
