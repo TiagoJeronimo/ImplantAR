@@ -15,6 +15,16 @@ public class Client : MonoBehaviour {
     private StreamReader reader;
 
     private Vector3 LastPosition;
+    private Quaternion LastRotation;
+    public GameObject LoginText;
+    public GameObject LoginCanvas;
+
+    public void WorkOffline() {
+        Debug.Log("work offline");
+        LoginText.GetComponent<Text>().text = "Offline";
+        LoginText.SetActive(true);
+        LoginCanvas.SetActive(false);
+    }
 
     public void ConnectToServer() {
         //if already connected ignore this function
@@ -50,23 +60,37 @@ public class Client : MonoBehaviour {
 
     private void Update() {
         if(socketReady) {
+            LoginText.SetActive(true);
+            LoginCanvas.SetActive(false);
             if (stream.DataAvailable) {
                 string data = reader.ReadLine();
                 if (data != null)
                     OnIncomingData(data); 
             }
-            Vector3 position = GameObject.FindGameObjectWithTag("CImp").GetComponent<Transform>().position; //Check the object tag if any error!!!!!
-            if (LastPosition != position) {
-                LastPosition = position;
-                string message = position.ToString();
-                Send(message);
+            Transform targetTransform = GameObject.FindGameObjectWithTag("CImp").GetComponent<Transform>();
+
+            if (targetTransform != null) {
+                Vector3 position = targetTransform.position; //Check the object tag if any error!!!!!
+
+                if (LastPosition != position) {
+                    LastPosition = position;
+                    string message = position.ToString() + "1";
+                    Send(message);
+                }
+
+                Quaternion rotation = targetTransform.rotation;
+                if (LastRotation != rotation) {
+                    LastRotation = rotation;
+                    string message = rotation.ToString() + "2";
+                    Send(message);
+                }
             }
         }
     }
 
     private void OnIncomingData(string data) {
         //recives data from server
-        Debug.Log("Server: " + data);
+        //Debug.Log("Server: " + data);
     }
 
     private void Send(string data) {
