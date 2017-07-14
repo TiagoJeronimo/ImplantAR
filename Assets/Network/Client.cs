@@ -15,6 +15,7 @@ public class Client : MonoBehaviour {
     private StreamReader reader;
 
     private Vector3 LastPosition;
+    private Vector3 LastRelativePosition;
     private Quaternion LastRotation;
     public GameObject LoginText;
     public GameObject LoginCanvas;
@@ -58,7 +59,7 @@ public class Client : MonoBehaviour {
         }
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         if(socketReady) {
             LoginText.SetActive(true);
             LoginCanvas.SetActive(false);
@@ -67,14 +68,24 @@ public class Client : MonoBehaviour {
                 if (data != null)
                     OnIncomingData(data); 
             }
-            Transform targetTransform = GameObject.FindGameObjectWithTag("CImp").GetComponent<Transform>();
+            GameObject targetObject = GameObject.FindGameObjectWithTag("CImp");
+            if (targetObject) {
+                Transform targetTransform = targetObject.GetComponent<Transform>();
 
-            if (targetTransform != null) {
-                Vector3 position = targetTransform.position; //Check the object tag if any error!!!!!
+                /*Vector3 position = targetTransform.position; //Check the object tag if any error!!!!!
 
                 if (LastPosition != position) {
                     LastPosition = position;
                     string message = position.ToString() + "1";
+                    Send(message);
+                }*/
+
+                Vector3 relativePosition = FindRelativePosition.PositionRelativeToJaw; //Check the object tag if any error!!!!!
+
+                if (LastRelativePosition != relativePosition) {
+                    LastRelativePosition = relativePosition;
+                    string message = relativePosition.ToString() + "1";
+                    //Debug.Log("sentMessage: " + message);
                     Send(message);
                 }
 
