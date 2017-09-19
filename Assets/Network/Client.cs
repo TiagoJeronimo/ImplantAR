@@ -20,6 +20,8 @@ public class Client : MonoBehaviour {
     public GameObject LoginText;
     public GameObject LoginCanvas;
 
+    public static Vector3 RelativePosition;
+
     public void WorkOffline() {
         Debug.Log("work offline");
         LoginText.GetComponent<Text>().text = "Offline";
@@ -72,14 +74,6 @@ public class Client : MonoBehaviour {
             if (targetObject) {
                 Transform targetTransform = targetObject.GetComponent<Transform>();
 
-                /*Vector3 position = targetTransform.position; //Check the object tag if any error!!!!!
-
-                if (LastPosition != position) {
-                    LastPosition = position;
-                    string message = position.ToString() + "1";
-                    Send(message);
-                }*/
-
                 Vector3 relativePosition = FindRelativePosition.PositionRelativeToJaw; //Check the object tag if any error!!!!!
 
                 if (LastRelativePosition != relativePosition) {
@@ -101,7 +95,29 @@ public class Client : MonoBehaviour {
 
     private void OnIncomingData(string data) {
         //recives data from server
-        //Debug.Log("Server: " + data);
+        if (TransformType(data) == 1) //postion
+            if (data.StartsWith("(")) RelativePosition = StringToVector3(data);
+    }
+
+    private int TransformType(string data) {
+        data = data.Substring(data.Length - 1);
+        return int.Parse(data);
+    }
+
+    private Vector3 StringToVector3(string sVector) {
+        //Debug.Log("Before string: " + sVector);
+        //Remove the parentheses
+        sVector = sVector.Substring(1, sVector.Length - 3);
+        //split the items
+        string[] sArray = sVector.Split(',');
+
+        //store as a Vector3
+        Vector3 result = new Vector3(
+            float.Parse(sArray[0]),
+            float.Parse(sArray[1]),
+            float.Parse(sArray[2]));
+
+        return result;
     }
 
     private void Send(string data) {

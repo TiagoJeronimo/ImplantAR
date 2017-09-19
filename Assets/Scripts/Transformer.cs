@@ -1,7 +1,4 @@
-﻿// adapted from various online sources
-// Gilles Ferrand, University of Manitoba 2016
-
-using UnityEngine;
+﻿using UnityEngine;
 using CnControls;
 
 public class Transformer : MonoBehaviour {
@@ -26,6 +23,10 @@ public class Transformer : MonoBehaviour {
     private float MovX = 0.0f;
     private float MovY = 0.0f;
     private float MovZ = 0.0f;
+
+    //Client information
+    private Vector3 LastPosition;
+    private Vector3 LastLocalPosition;
 
     void Start() {
         InitialScale = transform.localScale;
@@ -75,8 +76,18 @@ public class Transformer : MonoBehaviour {
                 transform.localPosition = new Vector3(MovX, MovY, transform.localPosition.z);
             }
 
-            // rotate 
-            else if (Input.GetMouseButton(0)) {
+            //Transform received from Server
+            this.transform.position = NewParent.transform.position - Client.RelativePosition;
+            if (LastPosition == this.transform.position) {
+                this.transform.localPosition = LastLocalPosition;
+            } else if (LastPosition != this.transform.position) {
+                //Debug.Log("entrei"); //continua a entrar aqui!!!
+                LastPosition = this.transform.position;
+                LastLocalPosition = this.transform.localPosition;
+            }
+
+              // rotate 
+              else if (Input.GetMouseButton(0)) {
                 
                 // Angulation text
                 Angulation.transform.position = this.transform.position;
