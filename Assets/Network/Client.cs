@@ -22,6 +22,8 @@ public class Client : MonoBehaviour {
 
     public static Vector3 RelativePosition;
 
+	private GameObject targetObject;
+
     public void WorkOffline() {
         Debug.Log("work offline");
         LoginText.GetComponent<Text>().text = "Offline";
@@ -65,18 +67,22 @@ public class Client : MonoBehaviour {
         if(socketReady) {
             LoginText.SetActive(true);
             LoginCanvas.SetActive(false);
+
+			if(!targetObject) targetObject = GameObject.FindGameObjectWithTag("CImp");
+
             if (stream.DataAvailable) {
+				Debug.Log ("data available");
                 string data = reader.ReadLine();
                 if (data != null)
                     OnIncomingData(data); 
             }
-            GameObject targetObject = GameObject.FindGameObjectWithTag("CImp");
-            if (targetObject) {
+            else if (targetObject) {
                 Transform targetTransform = targetObject.GetComponent<Transform>();
 
                 Vector3 relativePosition = FindRelativePosition.PositionRelativeToJaw; //Check the object tag if any error!!!!!
 
                 if (LastRelativePosition != relativePosition) {
+					Debug.Log ("sending data");
                     LastRelativePosition = relativePosition;
                     string message = relativePosition.ToString() + "1";
                     //Debug.Log("sentMessage: " + message);

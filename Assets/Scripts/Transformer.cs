@@ -28,6 +28,8 @@ public class Transformer : MonoBehaviour {
     private Vector3 LastPosition;
     private Vector3 LastLocalPosition;
 
+    private Vector3 LastServerRelativePos;
+
     void Start() {
         InitialScale = transform.localScale;
         ScaleImageTargetScript = NewParent.GetComponent<ScaleImageTarget>();
@@ -75,20 +77,9 @@ public class Transformer : MonoBehaviour {
                 MovY -= CnInputManager.GetAxis("Vertical");
                 transform.localPosition = new Vector3(MovX, MovY, transform.localPosition.z);
             }
+            // rotate 
+            else if (Input.GetMouseButton(0)) {
 
-            //Transform received from Server
-            this.transform.position = NewParent.transform.position - Client.RelativePosition;
-            if (LastPosition == this.transform.position) {
-                this.transform.localPosition = LastLocalPosition;
-            } else if (LastPosition != this.transform.position) {
-                //Debug.Log("entrei"); //continua a entrar aqui!!!
-                LastPosition = this.transform.position;
-                LastLocalPosition = this.transform.localPosition;
-            }
-
-              // rotate 
-              else if (Input.GetMouseButton(0)) {
-                
                 // Angulation text
                 Angulation.transform.position = this.transform.position;
                 float angleX = transform.eulerAngles.x;
@@ -108,8 +99,26 @@ public class Transformer : MonoBehaviour {
                 transform.eulerAngles = new Vector3(RotY, 0, RotX);
             }
 
-        }
-        
-    }
+            //ACBAR ISTO!!!
+            if(LastPosition != this.transform.position) {
+                LastPosition = this.transform.position;
+            } else {
 
+            }
+
+            // Transform received from Server
+            if (LastServerRelativePos != Client.RelativePosition) {
+                Debug.Log("Server mudou de pos");
+                LastServerRelativePos = Client.RelativePosition;
+                this.transform.position = NewParent.transform.position - Client.RelativePosition;
+                if (LastPosition == this.transform.position) {
+                    this.transform.localPosition = LastLocalPosition;
+                } else if (LastPosition != this.transform.position) {
+                    //Debug.Log("entrei"); //continua a entrar aqui!!!
+                    LastPosition = this.transform.position;
+                    LastLocalPosition = this.transform.localPosition;
+                }
+            }
+        }  
+    }
 }
