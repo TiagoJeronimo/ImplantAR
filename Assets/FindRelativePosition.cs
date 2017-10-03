@@ -10,9 +10,8 @@ public class FindRelativePosition : MonoBehaviour {
         GameObject targetObject = GameObject.FindGameObjectWithTag("CImp");
         if(targetObject) {
             Transform targetTransform = targetObject.GetComponent<Transform>();
-            PositionRelativeToJaw = this.transform.position - targetTransform.transform.position;
-
-            //Debug.Log("PositonRealativeJAw: " + PositionRelativeToJaw.ToString());
+			PositionRelativeToJaw = this.transform.InverseTransformPoint(targetTransform.transform.position);
         }
     }
+
 }

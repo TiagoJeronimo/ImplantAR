@@ -16,11 +16,11 @@ public class Client : MonoBehaviour {
 
     private Vector3 LastPosition;
     private Vector3 LastRelativePosition;
-    private Quaternion LastRotation;
+    private Vector3 LastRotation;
     public GameObject LoginText;
     public GameObject LoginCanvas;
 
-    public static Vector3 RelativePosition;
+	public static Vector3 LocalPosition;
 
 	private GameObject targetObject;
 
@@ -80,17 +80,16 @@ public class Client : MonoBehaviour {
                 Transform targetTransform = targetObject.GetComponent<Transform>();
 
                 Vector3 relativePosition = FindRelativePosition.PositionRelativeToJaw; //Check the object tag if any error!!!!!
-
                 if (LastRelativePosition != relativePosition) {
-					Debug.Log ("sending data");
+					//Debug.Log ("sending position data");
                     LastRelativePosition = relativePosition;
                     string message = relativePosition.ToString() + "1";
-                    //Debug.Log("sentMessage: " + message);
                     Send(message);
                 }
 
-                Quaternion rotation = targetTransform.rotation;
+				Vector3 rotation = Transformer.ImplantRotation;
                 if (LastRotation != rotation) {
+					//Debug.Log ("sending rotation data");
                     LastRotation = rotation;
                     string message = rotation.ToString() + "2";
                     Send(message);
@@ -102,7 +101,7 @@ public class Client : MonoBehaviour {
     private void OnIncomingData(string data) {
         //recives data from server
         if (TransformType(data) == 1) //postion
-            if (data.StartsWith("(")) RelativePosition = StringToVector3(data);
+            if (data.StartsWith("(")) LocalPosition = StringToVector3(data);
     }
 
     private int TransformType(string data) {

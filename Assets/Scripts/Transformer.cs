@@ -28,7 +28,9 @@ public class Transformer : MonoBehaviour {
     private Vector3 LastPosition;
     private Vector3 LastLocalPosition;
 
-    private Vector3 LastServerRelativePos;
+	private Vector3 LastServerLocalPosition;
+
+	public static Vector3 ImplantRotation;
 
     void Start() {
         InitialScale = transform.localScale;
@@ -96,29 +98,27 @@ public class Transformer : MonoBehaviour {
 
                 RotX -= CnInputManager.GetAxis("Horizontal");
                 RotY += CnInputManager.GetAxis("Vertical");
-                transform.eulerAngles = new Vector3(RotY, 0, RotX);
-            }
-
-            //ACBAR ISTO!!!
-            if(LastPosition != this.transform.position) {
-                LastPosition = this.transform.position;
-            } else {
-
+				ImplantRotation = new Vector3 (RotY, 0, RotX);
+				transform.eulerAngles = ImplantRotation;
             }
 
             // Transform received from Server
-            if (LastServerRelativePos != Client.RelativePosition) {
+			if (LastServerLocalPosition != Client.LocalPosition) {
                 Debug.Log("Server mudou de pos");
-                LastServerRelativePos = Client.RelativePosition;
-                this.transform.position = NewParent.transform.position - Client.RelativePosition;
+				LastServerLocalPosition = Client.LocalPosition;
+				this.transform.localPosition = Client.LocalPosition;
                 if (LastPosition == this.transform.position) {
                     this.transform.localPosition = LastLocalPosition;
                 } else if (LastPosition != this.transform.position) {
-                    //Debug.Log("entrei"); //continua a entrar aqui!!!
                     LastPosition = this.transform.position;
                     LastLocalPosition = this.transform.localPosition;
                 }
             }
         }  
     }
+
+	void OnGUI() {
+		GUI.Label(new Rect(10, 10, 1000, 20), "pos: " + this.transform.position);
+		GUI.Label(new Rect(10, 30, 1000, 20), "localPos: " + this.transform.localPosition);
+	}
 }
