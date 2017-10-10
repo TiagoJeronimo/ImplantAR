@@ -12,6 +12,9 @@ public class FindRelativePosition : MonoBehaviour {
             Transform targetTransform = targetObject.GetComponent<Transform>();
 			PositionRelativeToJaw = this.transform.InverseTransformPoint(targetTransform.transform.position);
         }
+
+
+
     }
 
 }
