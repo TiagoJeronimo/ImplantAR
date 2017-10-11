@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Vuforia;
 
 public class ScaleImageTarget : MonoBehaviour {
 
@@ -27,12 +26,16 @@ public class ScaleImageTarget : MonoBehaviour {
         if (ScaleOn) {
 
             CurrentDistance = (transform.position - Camera.main.transform.position).magnitude;
+            Debug.Log("CurrentDistance: " + CurrentDistance);
             Norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);
             Norm = Mathf.Clamp01(Norm);
 
             Vector3 maxScale = InitialScale * Scale;
 
             transform.localScale = Vector3.Lerp(InitialScale, maxScale, Norm);
+            /*Debug.Log("InitialScale: " + InitialScale);
+            Debug.Log("maxScale: " + maxScale);
+            Debug.Log("Norm: " + Norm);*/
 
             if (CurrentDistance >= MaxDistance) {
                 ScaleOn = false;

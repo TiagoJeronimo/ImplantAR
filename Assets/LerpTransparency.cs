@@ -15,7 +15,6 @@ public class LerpTransparency : MonoBehaviour {
             float alpha = distance / 100;
             if (alpha >= MaxAlpha) alpha = MaxAlpha;
             if (alpha <= MinAlpha) alpha = MinAlpha;
-            Debug.Log("alpha: " + alpha);
             GetComponent<Renderer>().material.color = new Color(1,1,1, alpha);
         }
     }

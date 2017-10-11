@@ -22,6 +22,7 @@ public class CrosshairManager : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         if (LoginCanvas.activeSelf == false) { //after online/offline configuration
+            Renderer.enabled = true;
             Transform cam = Camera.main.transform;
             //Debug.DrawRay(cam.position, cam.forward * 1000, Color.yellow);
             if (Physics.Raycast(cam.position, cam.forward, out Hit, 1000)) {
