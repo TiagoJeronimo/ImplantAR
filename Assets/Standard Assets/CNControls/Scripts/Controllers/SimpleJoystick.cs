@@ -225,8 +225,13 @@ namespace CnControls
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            // When we press, we first want to snap the joystick to the user's finger
-            if (SnapsToFinger)
+			// We also want to show it if we specified that behaviour
+			if (HideOnRelease)
+			{
+				Hide(false);
+			}
+			// When we press, we first want to snap the joystick to the user's finger
+			if (SnapsToFinger)
             {
                 CurrentEventCamera = eventData.pressEventCamera ?? CurrentEventCamera;
 
@@ -244,11 +249,6 @@ namespace CnControls
             else
             {
                 OnDrag(eventData);
-            }
-            // We also want to show it if we specified that behaviour
-            if (HideOnRelease)
-            {
-                Hide(false);
             }
         }
 
