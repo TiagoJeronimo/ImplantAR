@@ -19,6 +19,7 @@ public class Client : MonoBehaviour {
     private Vector3 LastRotation;
     public GameObject LoginText;
     public GameObject LoginCanvas;
+	private bool DisableLoginText = false;
 
 	public static Vector3 LocalPosition;
 
@@ -65,7 +66,11 @@ public class Client : MonoBehaviour {
 
     private void FixedUpdate() {
         if(socketReady) {
-            LoginText.SetActive(true);
+			if (!DisableLoginText) {
+				DisableLoginText = true;
+				LoginText.SetActive (true);
+				Invoke("HideServerText", 3);
+			}
             LoginCanvas.SetActive(false);
 
 			if(!targetObject) targetObject = GameObject.FindGameObjectWithTag("CImp");
@@ -77,7 +82,7 @@ public class Client : MonoBehaviour {
                     OnIncomingData(data); 
             }
             else if (targetObject) {
-                Transform targetTransform = targetObject.GetComponent<Transform>();
+                //Transform targetTransform = targetObject.GetComponent<Transform>();
 
                 Vector3 relativePosition = FindRelativePosition.PositionRelativeToJaw; //Check the object tag if any error!!!!!
                 if (LastRelativePosition != relativePosition) {
@@ -148,4 +153,8 @@ public class Client : MonoBehaviour {
     private void OnDisable() {
         CloseSocket();
     }
+
+	private void HideServerText() {
+		LoginText.SetActive(false);
+	}
 }

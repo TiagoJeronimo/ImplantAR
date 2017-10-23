@@ -118,7 +118,7 @@ public class Transformer : MonoBehaviour {
     }
 
 	void OnGUI() {
-		GUI.Label(new Rect(10, 10, 1000, 20), "pos: " + this.transform.position);
-		GUI.Label(new Rect(10, 30, 1000, 20), "localPos: " + this.transform.localPosition);
+		//GUI.Label(new Rect(10, 10, 1000, 20), "pos: " + this.transform.position);
+		//GUI.Label(new Rect(10, 30, 1000, 20), "localPos: " + this.transform.localPosition);
 	}
 }
