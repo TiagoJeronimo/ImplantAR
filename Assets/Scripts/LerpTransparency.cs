@@ -16,13 +16,13 @@ public class LerpTransparency : MonoBehaviour {
             if (alpha >= MaxAlpha) alpha = MaxAlpha;
             if (alpha <= MinAlpha) alpha = MinAlpha;
 
-            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            GetComponent<Renderer>().material.color = new Color(1, 1, 1, alpha);
+
+            /*Renderer[] renderers = GetComponentsInChildren<Renderer>();
  
             for(int i = 0; i < renderers.Length; i++) {
                 renderers[i].sharedMaterial.color = new Color(1,1,1, alpha);
-            }
-
-
+            }*/
         }
     }
 }
