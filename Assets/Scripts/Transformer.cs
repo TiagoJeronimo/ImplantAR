@@ -60,6 +60,7 @@ public class Transformer : MonoBehaviour {
 
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
                 this.transform.SetParent(ImplantNewParent);
+                this.transform.localEulerAngles = Vector3.zero;
                 ScrewFixed = true;
                 Handheld.Vibrate();
                 Debug.Log("Screw fixed");
@@ -130,5 +131,7 @@ public class Transformer : MonoBehaviour {
 		GUI.Label(new Rect(10, 10, 1000, 20), "localRot: " + this.transform.localEulerAngles);
         GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
-	}
+        GUI.Label(new Rect(10, 100, 1000, 20), "scale: " + (this.transform.lossyScale - this.transform.localScale));
+        //GUI.Label(new Rect(10, 120, 1000, 20), "localscale: " + this.transform.localScale);
+    }
 }
