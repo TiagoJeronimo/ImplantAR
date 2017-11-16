@@ -68,7 +68,6 @@ public class Transformer : MonoBehaviour {
                 LastServerLocalPosition = Client.LocalPosition;
                 Client.LocalRotation = this.transform.localEulerAngles;
                 LastServerLocalRotation= Client.LocalRotation;
-                
             }
 
         } else if (ScrewFixed) {  
@@ -128,10 +127,10 @@ public class Transformer : MonoBehaviour {
     }
 
 	void OnGUI() {
-		GUI.Label(new Rect(10, 10, 1000, 20), "localRot: " + this.transform.localEulerAngles);
+		/*GUI.Label(new Rect(10, 10, 1000, 20), "localRot: " + this.transform.localEulerAngles);
         GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
-        GUI.Label(new Rect(10, 100, 1000, 20), "scale: " + (this.transform.lossyScale - this.transform.localScale));
+        GUI.Label(new Rect(10, 100, 1000, 20), "scale: " + (this.transform.lossyScale - this.transform.localScale));*/
         //GUI.Label(new Rect(10, 120, 1000, 20), "localscale: " + this.transform.localScale);
     }
 }

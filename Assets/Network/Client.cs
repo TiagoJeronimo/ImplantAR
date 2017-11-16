@@ -65,7 +65,7 @@ public class Client : MonoBehaviour {
         }
     }
 
-    private void FixedUpdate() {
+    private void Update() {
         if(socketReady) {
 			if (!DisableLoginText) {
 				DisableLoginText = true;
