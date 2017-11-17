@@ -49,7 +49,6 @@ public class Transformer : MonoBehaviour {
 
         if (!ScrewFixed) {
             this.transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
-            //transform.rotation = Quaternion.LookRotation(ImplantNewParent.transform.parent.position);
 
             SpotLight.transform.SetParent(this.transform);
             SpotLight.transform.localPosition =  Vector3.zero;
@@ -74,6 +73,9 @@ public class Transformer : MonoBehaviour {
             MovX = transform.localPosition.x;
             MovY = transform.localPosition.y;
             MovZ = transform.localPosition.z;
+
+            RotX = transform.localEulerAngles.z;
+            RotY = transform.localEulerAngles.x;
 
             Joystick.SetActive(true);
 
@@ -120,15 +122,16 @@ public class Transformer : MonoBehaviour {
             } 
             else if(LastServerLocalRotation != Client.LocalRotation) { //the server change position
                 this.transform.localEulerAngles = Client.LocalRotation;
-                LastLocalRotation = Client.LocalRotation;
-                LastServerLocalRotation = Client.LocalPosition;
+                LastLocalRotation = this.transform.localEulerAngles;
+                LastServerLocalRotation = Client.LocalRotation;
             }
         }  
     }
 
 	void OnGUI() {
-		/*GUI.Label(new Rect(10, 10, 1000, 20), "localRot: " + this.transform.localEulerAngles);
-        GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
+		GUI.Label(new Rect(10, 150, 1000, 20), "localRot: " + this.transform.localEulerAngles);
+
+        /*GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
         GUI.Label(new Rect(10, 100, 1000, 20), "scale: " + (this.transform.lossyScale - this.transform.localScale));*/
         //GUI.Label(new Rect(10, 120, 1000, 20), "localscale: " + this.transform.localScale);

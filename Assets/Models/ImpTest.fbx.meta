@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 69af75882fb0b90449a00f83d8041081
-timeCreated: 1491393119
+guid: 6125463572bafb24fac446dceb876fb2
+timeCreated: 1510919158
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -9,18 +9,18 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Sketchup
+    4300000: Sketchup.001
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material
-    second: {fileID: 2100000, guid: 7afde0f322d2e5544a6379361efd1a90, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: 2d1adedd8c139a740b5910da607af1db, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: _Silver_
-    second: {fileID: 2100000, guid: 4e78a585ba6614640bde53971e210ded, type: 2}
+      name: _Silver_.001
+    second: {fileID: 2100000, guid: a1435f09d6f641349a7b5dc0a85627fb, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -50,7 +50,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 100
+    globalScale: 0.01
     meshCompression: 0
     addColliders: 0
     importVisibility: 0
@@ -69,10 +69,10 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 180
+    normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 0
-    normalCalculationMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
