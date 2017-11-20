@@ -18,11 +18,13 @@ public class LerpTransparency : MonoBehaviour {
 
             //GetComponent<Renderer>().material.color = new Color(1, 1, 1, alpha);
 
+
             Renderer[] renderers = GetComponentsInChildren<Renderer>();
- 
-            for(int i = 0; i < renderers.Length; i++) {
+            renderers[0].sharedMaterial.color = new Color(1, 1, 1, alpha);
+            
+            /*for (int i = 0; i < renderers.Length; i++) {
                 renderers[i].sharedMaterial.color = new Color(1,1,1, alpha);
-            }
+            }*/
         }
     }
 }

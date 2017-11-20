@@ -129,7 +129,7 @@ public class Transformer : MonoBehaviour {
     }
 
 	void OnGUI() {
-		GUI.Label(new Rect(10, 150, 1000, 20), "localRot: " + this.transform.localEulerAngles);
+		//GUI.Label(new Rect(10, 150, 1000, 20), "localRot: " + this.transform.localEulerAngles);
 
         /*GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
