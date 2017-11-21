@@ -9,7 +9,7 @@ public class Transformer : MonoBehaviour {
     // Screw
     public Transform ImplantNewParent;
     ScaleImageTarget ScaleImageTargetScript;
-    bool ScrewFixed = false;
+    private bool ScrewFixed = false;
 
     public GameObject Joystick;
     public GameObject SpotLight;
@@ -34,6 +34,14 @@ public class Transformer : MonoBehaviour {
 	public static Vector3 SendingRotation;
     public static Vector3 SendingPosition;
 
+    private Transform PreviousParent;
+
+    private void Awake()
+    {
+        SendingRotation = Vector3.zero;
+        SendingPosition = Vector3.zero;
+    }
+
     void Start() {
         InitialScale = transform.localScale;
         ScaleImageTargetScript = ImplantNewParent.transform.parent.GetComponent<ScaleImageTarget>();
@@ -43,6 +51,8 @@ public class Transformer : MonoBehaviour {
         Line.transform.localPosition = Vector3.zero;
         Line.transform.localEulerAngles = new Vector3(0.0f,0.0f,90.0f);
         Line.SetActive(true);
+
+        PreviousParent = this.transform.parent;
     }
 
     void Update() {
@@ -128,7 +138,15 @@ public class Transformer : MonoBehaviour {
         }  
     }
 
-	void OnGUI() {
+    public void DetachScrew()
+    {
+        Debug.Log("Detach Screw");
+        transform.SetParent(PreviousParent);
+        transform.localPosition = new Vector3(0, 10, 120);
+        ScrewFixed = false;
+    }
+
+    void OnGUI() {
 		//GUI.Label(new Rect(10, 150, 1000, 20), "localRot: " + this.transform.localEulerAngles);
 
         /*GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);

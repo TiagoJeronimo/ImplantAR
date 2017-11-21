@@ -26,6 +26,12 @@ public class Client : MonoBehaviour {
 
 	private GameObject targetObject;
 
+    private void Awake()
+    {
+        LocalPosition = Vector3.zero;
+        LocalRotation = Vector3.zero;
+    }
+
     public void WorkOffline() {
         Debug.Log("work offline");
         LoginText.GetComponent<Text>().text = "Offline";
