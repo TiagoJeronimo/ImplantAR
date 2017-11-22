@@ -15,7 +15,6 @@ public class ImplantCollision : MonoBehaviour {
     void OnTriggerEnter(Collider collider) {
         if (collider.CompareTag("Nerve")) {
             GetComponent<Renderer>().material.color = CollisionColor;
-            Debug.Log("nerve");
         } else {
             GetComponent<Renderer>().material.color = InitialColor;
         }

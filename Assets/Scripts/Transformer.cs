@@ -36,6 +36,10 @@ public class Transformer : MonoBehaviour {
 
     private Transform PreviousParent;
 
+	public bool MoveOneDirection = true;
+	private int DirNumb;
+	private bool Getdir = true;
+
     private void Awake()
     {
         SendingRotation = Vector3.zero;
@@ -94,8 +98,10 @@ public class Transformer : MonoBehaviour {
                 transform.localPosition = new Vector3(transform.localPosition.x, MovY, transform.localPosition.z);
             } 
             else if (Input.GetMouseButton(1)) {
-                MovX -= CnInputManager.GetAxis("Horizontal");
-                MovZ -= CnInputManager.GetAxis("Vertical");
+				
+				MovX -= CnInputManager.GetAxis ("Horizontal");
+				MovZ -= CnInputManager.GetAxis ("Vertical");
+
                 transform.localPosition = new Vector3(MovX, transform.localPosition.y, MovZ);
             }
             // rotate 
@@ -136,6 +142,21 @@ public class Transformer : MonoBehaviour {
                 LastServerLocalRotation = Client.LocalRotation;
             }
         }  
+    }
+
+    private int MouseDirection(Vector2 auxPos)
+    {
+        Getdir = false;
+        if (Mathf.Abs(auxPos.x) > Mathf.Abs(auxPos.y))
+        {
+            return 0;//auxPos.y = 0;
+        }
+        else if (Mathf.Abs(auxPos.x) < Mathf.Abs(auxPos.y))
+        {
+            return 1;//auxPos.x = 0; 
+        }
+        else
+            return 2;
     }
 
     public void DetachScrew()
