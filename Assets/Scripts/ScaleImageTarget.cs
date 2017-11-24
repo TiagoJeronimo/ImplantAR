@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ScaleImageTarget : MonoBehaviour {
+public class ScaleImageTarget : MonoBehaviour
+{
 
     public float MinDistance;
     public float MaxDistance;
@@ -15,35 +14,41 @@ public class ScaleImageTarget : MonoBehaviour {
     private Vector3 InitialScale;
     private float CurrentDistance;
 
+    private float DisFactor;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         InitialScale = transform.localScale;
     }
 
     // Update is called once per frame
-    void Update() {
-        if (ScaleOn) {
+    void Update()
+    {
 
-            CurrentDistance = (transform.position - Camera.main.transform.position).magnitude;
-            Norm = (CurrentDistance - MinDistance) / (MaxDistance - MinDistance);
+        if (ScaleOn)
+        {
+            var distance = (transform.position - Camera.main.transform.position).magnitude;
+            DisFactor = distance / 5;
+            Norm = (distance - MinDistance) / (MaxDistance - MinDistance);
             Norm = Mathf.Clamp01(Norm);
 
-            Vector3 maxScale = InitialScale * Scale;
-   
-            transform.localScale = Vector3.Lerp(InitialScale, maxScale, Norm);
-
-            if (CurrentDistance >= MaxDistance) {
-                ScaleOn = false;
-            }
+            transform.localScale = Vector3.Lerp(InitialScale, InitialScale * Scale, Norm);
         }
     }
 
-    public void ChangeScale() {
-        ScaleOn = !ScaleOn;
+    public void EnableScale()
+    {
+        ScaleOn = true;
     }
 
-    public void EnableScale() {
-        ScaleOn = true;
+    public void DisableScale()
+    {
+        ScaleOn = false;
+    }
+
+    void OnGUI()
+    {
+        GUI.Label(new Rect(10, 150, 1000, 20), "Norm: " + Norm);
     }
 }

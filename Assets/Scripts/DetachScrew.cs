@@ -5,6 +5,12 @@ using UnityEngine;
 public class DetachScrew : MonoBehaviour {
 
 	public void Detach() {
-		GetComponentInChildren<Transformer> ().DetachScrew ();
+        if(Camera.main.GetComponentInChildren<Transformer>())
+        {
+            Camera.main.GetComponentInChildren<Transformer>().DetachScrew();
+        } else
+        {
+            GetComponentInChildren<Transformer>().DetachScrew();
+        }
 	}
 }

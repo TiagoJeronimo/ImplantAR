@@ -21,6 +21,7 @@ public class CrosshairManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+
         if (LoginCanvas.activeSelf == false) { //after online/offline configuration
             Renderer.enabled = true;
             Transform cam = Camera.main.transform;

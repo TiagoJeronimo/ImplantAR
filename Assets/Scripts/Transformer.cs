@@ -49,7 +49,6 @@ public class Transformer : MonoBehaviour {
     void Start() {
         InitialScale = transform.localScale;
         ScaleImageTargetScript = ImplantNewParent.transform.parent.GetComponent<ScaleImageTarget>();
-        ScaleImageTargetScript.EnableScale();
 
         Line.transform.SetParent(this.transform);
         Line.transform.localPosition = Vector3.zero;
@@ -70,18 +69,6 @@ public class Transformer : MonoBehaviour {
 
             Vector3 maxScale = InitialScale * ScaleImageTargetScript.Scale;
             transform.localScale = Vector3.Lerp(InitialScale, maxScale, ScaleImageTargetScript.Norm);
-
-            if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
-                this.transform.SetParent(ImplantNewParent);
-                this.transform.localEulerAngles = Vector3.zero;
-                ScrewFixed = true;
-                Handheld.Vibrate();
-                Debug.Log("Screw fixed");
-                Client.LocalPosition = this.transform.localPosition;
-                LastServerLocalPosition = Client.LocalPosition;
-                Client.LocalRotation = this.transform.localEulerAngles;
-                LastServerLocalRotation= Client.LocalRotation;
-            }
 
         } else if (ScrewFixed) {  
             MovX = transform.localPosition.x;
@@ -112,7 +99,6 @@ public class Transformer : MonoBehaviour {
 				transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
 
                 // Angulation text
-                Angulation.transform.position = this.transform.position;
                 float angleX = transform.localEulerAngles.x;
                 angleX = (angleX > 180) ? angleX - 360 : angleX;
                 float angleZ = transform.localEulerAngles.z;
@@ -161,14 +147,27 @@ public class Transformer : MonoBehaviour {
 
     public void DetachScrew()
     {
-        Debug.Log("Detach Screw");
-        transform.SetParent(PreviousParent);
-        transform.localPosition = new Vector3(0, 10, 120);
-        ScrewFixed = false;
+        if (!ScrewFixed)
+        {
+            this.transform.SetParent(ImplantNewParent);
+            this.transform.localEulerAngles = Vector3.zero;
+            Handheld.Vibrate();
+            Client.LocalPosition = this.transform.localPosition;
+            LastServerLocalPosition = Client.LocalPosition;
+            Client.LocalRotation = this.transform.localEulerAngles;
+            LastServerLocalRotation = Client.LocalRotation;
+        } else
+        {
+            Handheld.Vibrate();
+            transform.SetParent(PreviousParent);
+            transform.localPosition = new Vector3(0, 10, 120);
+        }
+
+        ScrewFixed = !ScrewFixed;
     }
 
     void OnGUI() {
-		//GUI.Label(new Rect(10, 150, 1000, 20), "localRot: " + this.transform.localEulerAngles);
+		//GUI.Label(new Rect(10, 150, 1000, 20), "ScrewFixed: " + ScrewFixed);
 
         /*GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
