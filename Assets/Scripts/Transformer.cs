@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using CnControls;
+using UnityEngine.UI;
 
 public class Transformer : MonoBehaviour {
 
@@ -16,7 +17,7 @@ public class Transformer : MonoBehaviour {
     public GameObject Line;
 
     //Text
-    public GameObject Angulation;
+    public Text Angulation;
 
     private float RotX = 0.0f;
     private float RotY = 0.0f;
@@ -36,9 +37,12 @@ public class Transformer : MonoBehaviour {
 
     private Transform PreviousParent;
 
+    public Slider SliderObj;
+    public Canvas CanvasObj;
+
 	public bool MoveOneDirection = true;
 	private int DirNumb;
-	private bool Getdir = true;
+	private bool Getdir = true; 
 
     private void Awake()
     {
@@ -47,6 +51,7 @@ public class Transformer : MonoBehaviour {
     }
 
     void Start() {
+        CanvasObj.enabled = true;
         InitialScale = transform.localScale;
         ScaleImageTargetScript = ImplantNewParent.transform.parent.GetComponent<ScaleImageTarget>();
 
@@ -62,13 +67,11 @@ public class Transformer : MonoBehaviour {
 
         if (!ScrewFixed) {
             this.transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
-
-            SpotLight.transform.SetParent(this.transform);
+            /*SpotLight.transform.SetParent(this.transform);
             SpotLight.transform.localPosition =  Vector3.zero;
-            SpotLight.SetActive(true);
+            SpotLight.SetActive(true);*/
 
-            Vector3 maxScale = InitialScale * ScaleImageTargetScript.Scale;
-            transform.localScale = Vector3.Lerp(InitialScale, maxScale, ScaleImageTargetScript.Norm);
+            ChangeScale(); 
 
         } else if (ScrewFixed) {  
             MovX = transform.localPosition.x;
@@ -103,7 +106,7 @@ public class Transformer : MonoBehaviour {
                 angleX = (angleX > 180) ? angleX - 360 : angleX;
                 float angleZ = transform.localEulerAngles.z;
                 angleZ = (angleZ > 180) ? angleZ - 360 : angleZ;
-                Angulation.GetComponent<TextMesh>().text = "    X: " + angleX.ToString("F1") + " Z: " + angleZ.ToString("F1");
+                Angulation.text = "    X: " + angleX.ToString("F1") + " Z: " + angleZ.ToString("F1");
             }
 
             if(LastLocalPosition != this.transform.localPosition) { //this side(Client) changed position
@@ -116,8 +119,6 @@ public class Transformer : MonoBehaviour {
                 LastServerLocalPosition = Client.LocalPosition;
             }
 
-            //depois de passar o primeiro if ele vai ao segundo else, pois o Client.localPosition não é alterado
-
             if(LastLocalRotation != this.transform.localEulerAngles) {
                 LastLocalRotation = this.transform.localEulerAngles;
                 SendingRotation = this.transform.localEulerAngles;
@@ -127,7 +128,7 @@ public class Transformer : MonoBehaviour {
                 LastLocalRotation = this.transform.localEulerAngles;
                 LastServerLocalRotation = Client.LocalRotation;
             }
-        }  
+        }
     }
 
     private int MouseDirection(Vector2 auxPos)
@@ -164,6 +165,10 @@ public class Transformer : MonoBehaviour {
         }
 
         ScrewFixed = !ScrewFixed;
+    }
+
+    private void ChangeScale() {
+        transform.localScale = new Vector3 (InitialScale.x + SliderObj.value*InitialScale.x, InitialScale.y+ SliderObj.value*InitialScale.y, InitialScale.z + SliderObj.value*InitialScale.z);
     }
 
     void OnGUI() {
