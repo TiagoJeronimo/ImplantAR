@@ -13,10 +13,8 @@ public class ChangeSprite : MonoBehaviour {
 	public void Change() {
 		Lock = !Lock;
 		if(!Lock) {
-			Debug.Log("aaa");
 			GetComponent<Image>().sprite = sprite1;
 		} else {
-			Debug.Log("jjj");
 			GetComponent<Image>().sprite = sprite2;
 		}
 	}

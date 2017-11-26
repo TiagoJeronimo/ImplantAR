@@ -73,7 +73,7 @@ public class Transformer : MonoBehaviour {
 
             ChangeScale(); 
 
-        } else if (ScrewFixed) {  
+        } else if (ScrewFixed) {
             MovX = transform.localPosition.x;
             MovY = transform.localPosition.y;
             MovZ = transform.localPosition.z;
@@ -83,23 +83,47 @@ public class Transformer : MonoBehaviour {
 
             Joystick.SetActive(true);
 
+            var horizDiffAngle = Vector3.SignedAngle(transform.parent.transform.right, Camera.main.transform.right, Vector3.up);
+
             if (Input.GetMouseButton(2)) {
                 MovY += CnInputManager.GetAxis("Vertical");
                 transform.localPosition = new Vector3(transform.localPosition.x, MovY, transform.localPosition.z);
             } 
             else if (Input.GetMouseButton(1)) {
 				
-				MovX -= CnInputManager.GetAxis ("Horizontal");
-				MovZ -= CnInputManager.GetAxis ("Vertical");
+                if(horizDiffAngle < 135 && horizDiffAngle > 45) {
+                    MovX += CnInputManager.GetAxis("Vertical");
+                    MovZ -= CnInputManager.GetAxis("Horizontal");
+                } else  if(horizDiffAngle > -135 && horizDiffAngle < -45) {
+                    MovX -= CnInputManager.GetAxis("Vertical");
+                    MovZ += CnInputManager.GetAxis("Horizontal");
+                } else if((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle >0  && horizDiffAngle <= 45)) {
+                    MovX += CnInputManager.GetAxis("Horizontal");
+                    MovZ += CnInputManager.GetAxis("Vertical");
+                } else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180  && horizDiffAngle >= 135)) {
+                    MovX -= CnInputManager.GetAxis("Horizontal");
+                    MovZ -= CnInputManager.GetAxis("Vertical");
+                }
 
                 transform.localPosition = new Vector3(MovX, transform.localPosition.y, MovZ);
             }
             // rotate 
             else if (Input.GetMouseButton(0)) {
 
-                RotX += CnInputManager.GetAxis("Horizontal");
-                RotY -= CnInputManager.GetAxis("Vertical");
-				transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
+                if (horizDiffAngle < 135 && horizDiffAngle > 45) {
+                    RotX -= CnInputManager.GetAxis("Vertical");
+                    RotY -= CnInputManager.GetAxis("Horizontal");
+                } else if (horizDiffAngle > -135 && horizDiffAngle < -45) {
+                    RotX += CnInputManager.GetAxis("Vertical");
+                    RotY += CnInputManager.GetAxis("Horizontal");
+                } else if ((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle > 0 && horizDiffAngle <= 45)) {
+                    RotX -= CnInputManager.GetAxis("Horizontal");
+                    RotY += CnInputManager.GetAxis("Vertical");
+                } else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180 && horizDiffAngle >= 135)) {
+                    RotX += CnInputManager.GetAxis("Horizontal");
+                    RotY -= CnInputManager.GetAxis("Vertical");
+                }
+                transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
 
                 // Angulation text
                 float angleX = transform.localEulerAngles.x;
@@ -129,21 +153,6 @@ public class Transformer : MonoBehaviour {
                 LastServerLocalRotation = Client.LocalRotation;
             }
         }
-    }
-
-    private int MouseDirection(Vector2 auxPos)
-    {
-        Getdir = false;
-        if (Mathf.Abs(auxPos.x) > Mathf.Abs(auxPos.y))
-        {
-            return 0;//auxPos.y = 0;
-        }
-        else if (Mathf.Abs(auxPos.x) < Mathf.Abs(auxPos.y))
-        {
-            return 1;//auxPos.x = 0; 
-        }
-        else
-            return 2;
     }
 
     public void DetachScrew()
