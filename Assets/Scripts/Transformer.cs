@@ -19,6 +19,8 @@ public class Transformer : MonoBehaviour {
     //Text
     public Text Angulation;
 
+    public GameObject DetachButton;
+
     private float RotX = 0.0f;
     private float RotY = 0.0f;
     private float MovX = 0.0f;
@@ -66,13 +68,19 @@ public class Transformer : MonoBehaviour {
     void Update() {
 
         if (!ScrewFixed) {
-            this.transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
-           
-            /*SpotLight.transform.SetParent(this.transform);
-            SpotLight.transform.localPosition =  Vector3.zero;
-            SpotLight.SetActive(true);*/
+            transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
 
-            ChangeScale(); 
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                if (Input.GetMouseButtonDown(0)) {
+                    transform.position = hit.point;
+                    DetachScrew();
+                    DetachButton.GetComponent<ChangeSprite>().Change();
+                }
+            }
+            ChangeScale();
+            Joystick.SetActive(false);
 
         } else if (ScrewFixed) {
             MovX = transform.localPosition.x;
