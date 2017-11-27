@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DetachScrew : MonoBehaviour {
 
-	public void Detach() {
+    public void Detach() {
         if(Camera.main.GetComponentInChildren<Transformer>())
         {
             Camera.main.GetComponentInChildren<Transformer>().DetachScrew();
@@ -13,4 +13,14 @@ public class DetachScrew : MonoBehaviour {
             GetComponentInChildren<Transformer>().DetachScrew();
         }
 	}
+
+    public void DTouchDown()
+    {
+        transform.GetComponentInChildren<Transformer>().DTouchDown();
+    }
+
+    public void DTouchUp()
+    {
+        transform.GetComponentInChildren<Transformer>().DTouchUp();
+    }
 }

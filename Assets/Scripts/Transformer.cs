@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using CnControls;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Transformer : MonoBehaviour {
 
@@ -9,10 +10,8 @@ public class Transformer : MonoBehaviour {
 
     // Screw
     public Transform ImplantNewParent;
-    ScaleImageTarget ScaleImageTargetScript;
     private bool ScrewFixed = false;
 
-    public GameObject Joystick;
     public GameObject SpotLight;
     public GameObject Line;
 
@@ -42,9 +41,15 @@ public class Transformer : MonoBehaviour {
     public Slider SliderObj;
     public Canvas CanvasObj;
 
-	public bool MoveOneDirection = true;
-	private int DirNumb;
-	private bool Getdir = true; 
+    public GameObject Joystick;
+    public GameObject TwoWayJoystick;
+    public GameObject RotationJoystick;
+
+    public GameObject DoubleTouchButton;
+
+    private int DirNumb;
+
+    private bool DoubleTouch = false;
 
     private void Awake()
     {
@@ -55,7 +60,6 @@ public class Transformer : MonoBehaviour {
     void Start() {
         CanvasObj.enabled = true;
         InitialScale = transform.localScale;
-        ScaleImageTargetScript = ImplantNewParent.transform.parent.GetComponent<ScaleImageTarget>();
 
        /* Line.transform.SetParent(this.transform);
         Line.transform.localPosition = Vector3.zero;
@@ -66,22 +70,26 @@ public class Transformer : MonoBehaviour {
     }
 
     void Update() {
-
         if (!ScrewFixed) {
+            DoubleTouchButton.SetActive(false);
+            Joystick.SetActive(false);
+            TwoWayJoystick.SetActive(false);
+            RotationJoystick.SetActive(false);
+
             transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
+            ChangeScale();
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) {
-                if (Input.GetMouseButtonDown(0)) {
-                    transform.position = hit.point;
-                    DetachScrew();
-                    DetachButton.GetComponent<ChangeSprite>().Change();
+            if (!EventSystem.current.IsPointerOverGameObject(0)) {
+                if (Physics.Raycast(ray, out hit)) {
+                    if (Input.GetMouseButtonDown(0)) {
+                        transform.position = hit.point;
+                        DetachScrew();
+                        DetachButton.GetComponent<ChangeSprite>().Change();
+                    }
                 }
             }
-            ChangeScale();
-            Joystick.SetActive(false);
-
         } else if (ScrewFixed) {
             MovX = transform.localPosition.x;
             MovY = transform.localPosition.y;
@@ -89,27 +97,43 @@ public class Transformer : MonoBehaviour {
 
             RotX = transform.localEulerAngles.z;
             RotY = transform.localEulerAngles.x;
+   
+            TwoWayJoystick.SetActive(true);
 
-            Joystick.SetActive(true);
-
+            if (DoubleTouch) {
+                RotationJoystick.SetActive(false);
+                Joystick.SetActive(true);
+            }
+            else {
+                Joystick.SetActive(false);
+                RotationJoystick.SetActive(true);
+            }
             var horizDiffAngle = Vector3.SignedAngle(transform.parent.transform.right, Camera.main.transform.right, Vector3.up);
 
-            if (Input.GetMouseButton(2)) {
-                MovY += CnInputManager.GetAxis("Vertical");
+            if (DoubleTouch && Input.GetMouseButton(0)) {
+                MovY += CnInputManager.GetAxis("2DVertical");
                 transform.localPosition = new Vector3(transform.localPosition.x, MovY, transform.localPosition.z);
-            } 
-            else if (Input.GetMouseButton(1)) {
-				
-                if(horizDiffAngle < 135 && horizDiffAngle > 45) {
+            }
+            //tranlation
+            if (DoubleTouch && Input.GetMouseButton(0)) {
+
+                if (horizDiffAngle < 135 && horizDiffAngle > 45)
+                {
                     MovX += CnInputManager.GetAxis("Vertical");
                     MovZ -= CnInputManager.GetAxis("Horizontal");
-                } else  if(horizDiffAngle > -135 && horizDiffAngle < -45) {
+                }
+                else if (horizDiffAngle > -135 && horizDiffAngle < -45)
+                {
                     MovX -= CnInputManager.GetAxis("Vertical");
                     MovZ += CnInputManager.GetAxis("Horizontal");
-                } else if((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle >0  && horizDiffAngle <= 45)) {
+                }
+                else if ((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle > 0 && horizDiffAngle <= 45))
+                {
                     MovX += CnInputManager.GetAxis("Horizontal");
                     MovZ += CnInputManager.GetAxis("Vertical");
-                } else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180  && horizDiffAngle >= 135)) {
+                }
+                else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180 && horizDiffAngle >= 135))
+                {
                     MovX -= CnInputManager.GetAxis("Horizontal");
                     MovZ -= CnInputManager.GetAxis("Vertical");
                 }
@@ -117,20 +141,20 @@ public class Transformer : MonoBehaviour {
                 transform.localPosition = new Vector3(MovX, transform.localPosition.y, MovZ);
             }
             // rotate 
-            else if (Input.GetMouseButton(0)) {
+            else if (!DoubleTouch && Input.GetMouseButton(0)) {
 
                 if (horizDiffAngle < 135 && horizDiffAngle > 45) {
-                    RotX -= CnInputManager.GetAxis("Vertical");
-                    RotY -= CnInputManager.GetAxis("Horizontal");
+                    RotX -= CnInputManager.GetAxis("RotVertical");
+                    RotY -= CnInputManager.GetAxis("RotHorizontal");
                 } else if (horizDiffAngle > -135 && horizDiffAngle < -45) {
-                    RotX += CnInputManager.GetAxis("Vertical");
-                    RotY += CnInputManager.GetAxis("Horizontal");
+                    RotX += CnInputManager.GetAxis("RotVertical");
+                    RotY += CnInputManager.GetAxis("RotHorizontal");
                 } else if ((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle > 0 && horizDiffAngle <= 45)) {
-                    RotX -= CnInputManager.GetAxis("Horizontal");
-                    RotY += CnInputManager.GetAxis("Vertical");
+                    RotX -= CnInputManager.GetAxis("RotHorizontal");
+                    RotY += CnInputManager.GetAxis("RotVertical");
                 } else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180 && horizDiffAngle >= 135)) {
-                    RotX += CnInputManager.GetAxis("Horizontal");
-                    RotY -= CnInputManager.GetAxis("Vertical");
+                    RotX += CnInputManager.GetAxis("RotHorizontal");
+                    RotY -= CnInputManager.GetAxis("RotVertical");
                 }
                 transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
 
@@ -166,8 +190,11 @@ public class Transformer : MonoBehaviour {
 
     public void DetachScrew()
     {
-        if (!ScrewFixed)
+        ScrewFixed = !ScrewFixed;
+
+        if (ScrewFixed)
         {
+            DoubleTouchButton.SetActive(true);
             this.transform.SetParent(ImplantNewParent);
             this.transform.localEulerAngles = Vector3.zero;
             Handheld.Vibrate();
@@ -181,12 +208,20 @@ public class Transformer : MonoBehaviour {
             transform.SetParent(PreviousParent);
             transform.localPosition = new Vector3(0, 10, 120);
         }
-
-        ScrewFixed = !ScrewFixed;
     }
 
     private void ChangeScale() {
         transform.localScale = new Vector3 (InitialScale.x + SliderObj.value*InitialScale.x, InitialScale.y+ SliderObj.value*InitialScale.y, InitialScale.z + SliderObj.value*InitialScale.z);
+    }
+
+    public void DTouchDown()
+    {
+        DoubleTouch = true;
+    }
+
+    public void DTouchUp()
+    {
+        DoubleTouch = false;
     }
 
     void OnGUI() {
