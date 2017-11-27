@@ -35,6 +35,7 @@ public class Transformer : MonoBehaviour {
 
 	public static Vector3 SendingRotation;
     public static Vector3 SendingPosition;
+    public static int AttachScrew;
 
     private Transform PreviousParent;
 
@@ -71,6 +72,8 @@ public class Transformer : MonoBehaviour {
 
     void Update() {
         if (!ScrewFixed) {
+
+            AttachScrew = 0;
             DoubleTouchButton.SetActive(false);
             Joystick.SetActive(false);
             TwoWayJoystick.SetActive(false);
@@ -91,6 +94,8 @@ public class Transformer : MonoBehaviour {
                 }
             }
         } else if (ScrewFixed) {
+            AttachScrew = 1;
+
             MovX = transform.localPosition.x;
             MovY = transform.localPosition.y;
             MovZ = transform.localPosition.z;

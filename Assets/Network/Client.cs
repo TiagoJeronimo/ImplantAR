@@ -24,7 +24,8 @@ public class Client : MonoBehaviour {
 	public static Vector3 LocalPosition;
     public static Vector3 LocalRotation;
 
-	private GameObject targetObject;
+    private int LastAttachScrew = 0;
+    private GameObject targetObject;
 
     private void Awake()
     {
@@ -102,6 +103,13 @@ public class Client : MonoBehaviour {
 					//Debug.Log ("sending rotation data");
                     LastRotation = Transformer.SendingRotation;
                     string message = LastRotation.ToString() + "2";
+                    Send(message);
+                }
+
+                if(LastAttachScrew != Transformer.AttachScrew) {
+                    Debug.Log ("sending rotation data: " + Transformer.AttachScrew);
+                    LastAttachScrew = Transformer.AttachScrew;
+                    string message = LastAttachScrew.ToString() + "3";
                     Send(message);
                 }
             }
