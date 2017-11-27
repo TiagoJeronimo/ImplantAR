@@ -55,9 +55,9 @@ public class Transformer : MonoBehaviour {
         InitialScale = transform.localScale;
         ScaleImageTargetScript = ImplantNewParent.transform.parent.GetComponent<ScaleImageTarget>();
 
-        Line.transform.SetParent(this.transform);
+       /* Line.transform.SetParent(this.transform);
         Line.transform.localPosition = Vector3.zero;
-        Line.transform.localEulerAngles = new Vector3(0.0f,0.0f,90.0f);
+        Line.transform.localEulerAngles = new Vector3(0.0f,0.0f,90.0f);*/
         Line.SetActive(true);
 
         PreviousParent = this.transform.parent;
@@ -67,6 +67,7 @@ public class Transformer : MonoBehaviour {
 
         if (!ScrewFixed) {
             this.transform.LookAt(new Vector3(ImplantNewParent.transform.parent.position.x, this.transform.position.y, ImplantNewParent.transform.parent.position.z));
+           
             /*SpotLight.transform.SetParent(this.transform);
             SpotLight.transform.localPosition =  Vector3.zero;
             SpotLight.SetActive(true);*/
