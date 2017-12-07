@@ -10,8 +10,13 @@ public class ImplantCollision : MonoBehaviour {
 
     public GameObject Mandible;
 
+    public Shader ShaderOpace;
+    public Shader ShaderTrans;
+
     void Start() {
         InitialColor = GetComponent<Renderer>().material.color;
+
+        ShaderOpace = Shader.Find("Standard");
     }
 
     void OnTriggerEnter(Collider collider) {
@@ -19,12 +24,14 @@ public class ImplantCollision : MonoBehaviour {
             GetComponent<Renderer>().material.color = CollisionColor;
 
             Renderer[] renderers = Mandible.GetComponentsInChildren<Renderer>();
+            renderers[0].sharedMaterial.shader = ShaderTrans;
             renderers[0].sharedMaterial.color = new Color(1, 1, 1, 0.8f);
 
         } else {
             GetComponent<Renderer>().material.color = InitialColor;
 
             Renderer[] renderers = Mandible.GetComponentsInChildren<Renderer>();
+            renderers[0].sharedMaterial.shader = ShaderOpace;
             renderers[0].sharedMaterial.color = new Color(1, 1, 1, 1);
         }
     }
@@ -36,6 +43,7 @@ public class ImplantCollision : MonoBehaviour {
             GetComponent<Renderer>().material.color = CollisionColor;
 
             Renderer[] renderers = Mandible.GetComponentsInChildren<Renderer>();
+            renderers[0].sharedMaterial.shader = ShaderTrans;
             renderers[0].sharedMaterial.color = new Color(1, 1, 1, 0.8f);
         }
     }
@@ -45,6 +53,7 @@ public class ImplantCollision : MonoBehaviour {
             GetComponent<Renderer>().material.color = InitialColor;
 
             Renderer[] renderers = Mandible.GetComponentsInChildren<Renderer>();
+            renderers[0].sharedMaterial.shader = ShaderOpace;
             renderers[0].sharedMaterial.color = new Color(1, 1, 1, 1);
 
         }

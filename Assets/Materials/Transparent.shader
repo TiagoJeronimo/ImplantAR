@@ -17,8 +17,8 @@ Shader "Custom/Transparent"
              // Render normally
      
                  ZWrite Off
-                 Blend SrcAlpha OneMinusSrcAlpha
-                 ColorMask RGB
+        Blend SrcAlpha OneMinusSrcAlpha
+        ColorMask RGB
 
             CGPROGRAM
  
