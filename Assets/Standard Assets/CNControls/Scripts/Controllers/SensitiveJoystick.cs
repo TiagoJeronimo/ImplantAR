@@ -16,6 +16,8 @@ namespace CnControls
             var linearHorizontalValue = HorizintalAxis.Value;
             var linearVecticalValue = VerticalAxis.Value;
 
+
+
             var horizontalSign = Mathf.Sign(linearHorizontalValue);
             var verticalSign = Mathf.Sign(linearVecticalValue);
 

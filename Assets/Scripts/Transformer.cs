@@ -122,25 +122,37 @@ public class Transformer : MonoBehaviour {
             //tranlation
             if (DoubleTouch && Input.GetMouseButton(0)) {
 
+                float VertAxis = CnInputManager.GetAxis("Vertical");
+                float HorAxis = CnInputManager.GetAxis("Horizontal");
+
+                if (Mathf.Abs(VertAxis) > Mathf.Abs(HorAxis))
+                {
+                    HorAxis = 0;
+                }
+                else
+                {
+                    VertAxis = 0;
+                }
+
                 if (horizDiffAngle < 135 && horizDiffAngle > 45)
                 {
-                    MovX += CnInputManager.GetAxis("Vertical");
-                    MovZ -= CnInputManager.GetAxis("Horizontal");
+                    MovX += VertAxis;
+                    MovZ -= HorAxis;
                 }
                 else if (horizDiffAngle > -135 && horizDiffAngle < -45)
                 {
-                    MovX -= CnInputManager.GetAxis("Vertical");
-                    MovZ += CnInputManager.GetAxis("Horizontal");
+                    MovX -= VertAxis;
+                    MovZ += HorAxis;
                 }
                 else if ((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle > 0 && horizDiffAngle <= 45))
                 {
-                    MovX += CnInputManager.GetAxis("Horizontal");
-                    MovZ += CnInputManager.GetAxis("Vertical");
+                    MovX += HorAxis;
+                    MovZ += VertAxis;
                 }
                 else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180 && horizDiffAngle >= 135))
                 {
-                    MovX -= CnInputManager.GetAxis("Horizontal");
-                    MovZ -= CnInputManager.GetAxis("Vertical");
+                    MovX -= HorAxis;
+                    MovZ -= VertAxis;
                 }
 
                 transform.localPosition = new Vector3(MovX, transform.localPosition.y, MovZ);
@@ -148,18 +160,29 @@ public class Transformer : MonoBehaviour {
             // rotate 
             else if (!DoubleTouch && Input.GetMouseButton(0)) {
 
+                float VertAxis = CnInputManager.GetAxis("RotVertical");
+                float HorAxis = CnInputManager.GetAxis("RotHorizontal");
+
+                if(Mathf.Abs(VertAxis) > Mathf.Abs(HorAxis))
+                {
+                    HorAxis = 0;
+                } else
+                {
+                    VertAxis = 0;
+                }
+
                 if (horizDiffAngle < 135 && horizDiffAngle > 45) {
-                    RotX -= CnInputManager.GetAxis("RotVertical");
-                    RotY -= CnInputManager.GetAxis("RotHorizontal");
+                    RotX -= VertAxis;
+                    RotY -= HorAxis;
                 } else if (horizDiffAngle > -135 && horizDiffAngle < -45) {
-                    RotX += CnInputManager.GetAxis("RotVertical");
-                    RotY += CnInputManager.GetAxis("RotHorizontal");
+                    RotX += VertAxis;
+                    RotY += HorAxis;
                 } else if ((horizDiffAngle <= 0 && horizDiffAngle >= -45) || (horizDiffAngle > 0 && horizDiffAngle <= 45)) {
-                    RotX -= CnInputManager.GetAxis("RotHorizontal");
-                    RotY += CnInputManager.GetAxis("RotVertical");
+                    RotX -= HorAxis;
+                    RotY += VertAxis;
                 } else if ((horizDiffAngle >= -180 && horizDiffAngle <= -135) || (horizDiffAngle <= 180 && horizDiffAngle >= 135)) {
-                    RotX += CnInputManager.GetAxis("RotHorizontal");
-                    RotY -= CnInputManager.GetAxis("RotVertical");
+                    RotX += HorAxis;
+                    RotY -= VertAxis;
                 }
                 transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
 

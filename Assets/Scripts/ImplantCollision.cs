@@ -29,6 +29,17 @@ public class ImplantCollision : MonoBehaviour {
         }
     }
 
+    void OnTriggerStay(Collider collider)
+    {
+        if (collider.CompareTag("Nerve"))
+        {
+            GetComponent<Renderer>().material.color = CollisionColor;
+
+            Renderer[] renderers = Mandible.GetComponentsInChildren<Renderer>();
+            renderers[0].sharedMaterial.color = new Color(1, 1, 1, 0.8f);
+        }
+    }
+
     void OnTriggerExit(Collider collider) {
         if (collider.CompareTag("Nerve")) {
             GetComponent<Renderer>().material.color = InitialColor;
