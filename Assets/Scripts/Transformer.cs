@@ -33,7 +33,7 @@ public class Transformer : MonoBehaviour {
     private Vector3 LastLocalRotation;
     private Vector3 LastServerLocalRotation;
 
-	public static Vector3 SendingRotation;
+    public static Vector3 SendingRotation;
     public static Vector3 SendingPosition;
     public static int AttachScrew;
 
@@ -184,6 +184,7 @@ public class Transformer : MonoBehaviour {
                     RotX += HorAxis;
                     RotY -= VertAxis;
                 }
+				Debug.Log ("RotY: " + RotY);
                 transform.localEulerAngles = new Vector3 (RotY, 0, RotX);
 
                 // Angulation text
@@ -253,7 +254,7 @@ public class Transformer : MonoBehaviour {
     }
 
     void OnGUI() {
-		//GUI.Label(new Rect(10, 150, 1000, 20), "ScrewFixed: " + ScrewFixed);
+        //GUI.Label(new Rect(10, 150, 1000, 20), "ScrewFixed: " + ScrewFixed);
 
         /*GUI.Label(new Rect(10, 30, 1000, 20), "Pos: " + this.transform.position);
         GUI.Label(new Rect(10, 50, 1000, 20), "localPos: " + this.transform.localPosition);
